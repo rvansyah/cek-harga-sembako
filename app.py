@@ -2,12 +2,12 @@ import streamlit as st
 import pandas as pd
 import os
 
-# Fungsi untuk load data, ramah error jika file tidak ada
 @st.cache_data
 def load_data():
     path = "data/data_harga_sembako.csv"
     if not os.path.exists(path):
-        return None
+        st.error(f"File {path} tidak ditemukan!")
+        st.stop()
     return pd.read_csv(path)
 
 df = load_data()
@@ -19,10 +19,6 @@ st.markdown(
     Data diupdate secara berkala.
     """
 )
-
-if df is None:
-    st.error("Data harga sembako belum tersedia. Pastikan file data/data_harga_sembako.csv sudah ada.")
-    st.stop()
 
 # Pilih kota
 kota = st.selectbox("Pilih Kota", sorted(df["Kota"].unique()))
